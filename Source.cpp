@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdint>
+#include <cstdlib>
 #define MIN(a,b)  ((a)<(b)?(a):(b))
 #define BLOCK_LOW(id,p,n)  ((id)*(n)/(p))
 
