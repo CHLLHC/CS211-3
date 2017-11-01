@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 		printf("%d primes are less than or equal to %llu\n",
 			global_count, n);
 		printf("Total elapsed time: %10.6f\n", elapsed_time);
-		printf("This is Part 1\n");
+		printf("This is Part 2\n");
 	}
 
 	MPI_Finalize();

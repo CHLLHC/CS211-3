@@ -67,9 +67,6 @@ int main(int argc, char *argv[])
 			else
 				first = prime - (low_value % prime);
 		}
-		if (first & 1 == 0) {
-			first += prime;
-		}
 		for (uint64_t i = first; i < size; i += prime)
 			if (i & 1)//only if i is odd
 				marked[i >> 1] = 1;
