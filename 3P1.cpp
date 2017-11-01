@@ -83,6 +83,7 @@ int main(int argc, char *argv[])
 			//next prime
 			prime = (next_Unmark << 1) + 1; //*2+1, same speed if -O3.
 		}
+		prime = n;
 		MPI_Bcast(&prime, 1, MPI_UINT64_T, 0, MPI_COMM_WORLD);
 	}
 	printf("%d Reach Checkpoint 2", id);
