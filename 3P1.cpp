@@ -5,11 +5,10 @@
 #include <cstdint>
 #include <cstdlib>
 #define MIN(a,b)  ((a)<(b)?(a):(b))
-#define BLOCK_LOW(id,p,n)  ((id)*(n)/(p))
 
+#define BLOCK_LOW(id,p,n)  ((id)*(n)/(p))
 #define BLOCK_HIGH(id,p,n) \
         ( BLOCK_LOW((id)+1,p,n)-1 ) 
-
 #define BLOCK_SIZE(id,p,n) \
         (BLOCK_LOW( (id)+1, p, n) -  BLOCK_LOW((id), p, n))
 
@@ -32,13 +31,13 @@ int main(int argc, char *argv[])
 		MPI_Finalize();
 		return 1;
 	}
-	//First prime starts at 3
+	//NO OFFSET
 	uint64_t n = atoll(argv[1]);
-	uint64_t low_value = 3 + BLOCK_LOW(id, p, n - 1);
-	uint64_t high_value = 3 + BLOCK_HIGH(id, p, n - 1);
-	uint64_t size = BLOCK_SIZE(id, p, n - 1);
-	uint64_t proc0_size = (n - 1) / p;
-	if ((3 + proc0_size) < sqrt(n)) {
+	uint64_t low_value = BLOCK_LOW(id, p, n);
+	uint64_t high_value = BLOCK_HIGH(id, p, n);
+	uint64_t size = BLOCK_SIZE(id, p, n);
+	uint64_t proc0_size = n / p;
+	if (proc0_size < sqrt(n)) {
 		if (id == 0)
 			printf("Too many processes\n");
 		MPI_Finalize();
@@ -52,9 +51,14 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	for (uint64_t i = 0; i < size >> 1; i++)
+	for (uint64_t i = 0; i < (size >> 1); i++)
 		marked[i] = 0;
 
+	
+	if (id == 0) {
+		//1 is not prime
+		marked[0] = 1;
+	}
 
 	//First Prime starts at 3
 	uint64_t prime = 3;
@@ -63,23 +67,28 @@ int main(int argc, char *argv[])
 		if (prime * prime > low_value)
 			first = prime * prime - low_value;
 		else {
-			if (!(low_value % prime)) first = 0;
-			else first = prime - (low_value % prime);
+			if (low_value % prime == 0)
+				first = 0;
+			else
+				first = prime - (low_value % prime);
 		}
-		for (uint64_t i = first; i < size; i += prime)
+		for (uint64_t i = first; i < (size >> 1); i += prime)
 			if (i & 1)//only if i is odd
 				marked[i >> 1] = 1;
 		if (id == 0) {
-			while ((marked[(prime) >> 1]) && (prime < high_value)) {
-				prime += 2;
+			uint64_t next_Unmark = prime >> 1;
+			while ((marked[next_Unmark]) && (next_Unmark < (high_value >> 1))) {
+				next_Unmark++;////////////////////////////
 			}
+			//next prime
+			prime = (next_Unmark << 1) + 1; //*2+1, same speed if -O3.
 		}
 		MPI_Bcast(&prime, 1, MPI_UINT64_T, 0, MPI_COMM_WORLD);
 	}
 
 
 	int count = 0;
-	for (uint64_t i = 0; i < size >> 1; i++)
+	for (uint64_t i = 0; i < (size >> 1); i++)
 		if (!marked[i])
 			count++;
 
