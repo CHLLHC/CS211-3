@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 		}
 		MPI_Bcast(&prime, 1, MPI_UINT64_T, 0, MPI_COMM_WORLD);
 	}
-	printf("%d Reach Checkpoint 2", id);
+	printf("%d Reach Checkpoint 2\n", id);
 
 	int count = 0;
 	for (uint64_t i = 0; i < (size >> 1); i++)
