@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 
 
 	if (id == 0) {
-		printf("%d primes are less than or equal to %d\n",
+		printf("%d primes are less than or equal to %llu\n",
 			global_count, n);
 		printf("Total elapsed time: %10.6f\n", elapsed_time);
 	}
