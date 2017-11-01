@@ -53,12 +53,8 @@ int main(int argc, char *argv[])
 
 	for (uint64_t i = 0; i < (size >> 1); i++)
 		marked[i] = 0;
+	//marked[0] was for 1, but since 1 is not prime but 2 is, so marked[0] is for 2 instead.
 
-
-	if (id == 0) {
-		//1 is not prime
-		marked[0] = 1;
-	}
 	printf("%d Reach Checkpoint 1\n", id);
 	//First Prime starts at 3
 	uint64_t prime = 3;
