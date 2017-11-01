@@ -67,7 +67,10 @@ int main(int argc, char *argv[])
 			else
 				first = prime - (low_value % prime);
 		}
-		for (uint64_t i = first; i < size; i += prime)
+		if (first & 1 == 0) {
+			first += prime;
+		}
+		for (uint64_t i = first; i < size; i += (prime * 2))
 			if (i & 1)//only if i is odd
 				marked[i >> 1] = 1;
 		if (id == 0) {
@@ -97,6 +100,7 @@ int main(int argc, char *argv[])
 		printf("%d primes are less than or equal to %llu\n",
 			global_count, n);
 		printf("Total elapsed time: %10.6f\n", elapsed_time);
+		printf("This is Part 1\n");
 	}
 
 	MPI_Finalize();
