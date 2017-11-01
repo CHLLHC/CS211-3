@@ -55,7 +55,6 @@ int main(int argc, char *argv[])
 		marked[i] = 0;
 	//marked[0] was for 1, but since 1 is not prime but 2 is, so marked[0] is for 2 instead.
 
-	printf("%d Reach Checkpoint 1\n", id);
 	//First Prime starts at 3
 	uint64_t prime = 3;
 	uint64_t first;
@@ -81,7 +80,7 @@ int main(int argc, char *argv[])
 		}
 		MPI_Bcast(&prime, 1, MPI_UINT64_T, 0, MPI_COMM_WORLD);
 	}
-	printf("%d Reach Checkpoint 2\n", id);
+
 
 	int count = 0;
 	for (uint64_t i = 0; i < (size >> 1); i++)
