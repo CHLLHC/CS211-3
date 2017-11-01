@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 	int rc = MPI_Init(&argc, &argv);
 	MPI_Barrier(MPI_COMM_WORLD);
 	double elapsed_time = -MPI_Wtime();
-	int id, p;
+	int id = 0, p = 1;
 	MPI_Comm_rank(MPI_COMM_WORLD, &id);
 	MPI_Comm_size(MPI_COMM_WORLD, &p);
 
@@ -72,11 +72,11 @@ int main(int argc, char *argv[])
 			else
 				first = prime - (low_value % prime);
 		}
-		for (uint64_t i = first; i < size; i +=prime)
+		for (uint64_t i = first; i < size; i += prime)
 			if (i & 1)//only if i is odd
 				marked[i >> 1] = 1;
 		if (id == 0) {
-			uint64_t next_Unmark = prime >> 1;
+			uint64_t next_Unmark = (prime >> 1) + 1;
 			while ((marked[next_Unmark]) && (next_Unmark < (high_value >> 1))) {
 				next_Unmark++;
 			}
