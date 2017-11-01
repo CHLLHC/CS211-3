@@ -32,13 +32,13 @@ int main(int argc, char *argv[])
 		MPI_Finalize();
 		return 1;
 	}
-
+	//First prime starts at 3
 	uint64_t n = atoll(argv[1]);
-	uint64_t low_value = 2 + BLOCK_LOW(id, p, n - 1);
-	uint64_t high_value = 2 + BLOCK_HIGH(id, p, n - 1);
+	uint64_t low_value = 3 + BLOCK_LOW(id, p, n - 1);
+	uint64_t high_value = 3 + BLOCK_HIGH(id, p, n - 1);
 	uint64_t size = BLOCK_SIZE(id, p, n - 1);
 	uint64_t proc0_size = (n - 1) / p;
-	if ((2 + proc0_size) < sqrt(n)) {
+	if ((3 + proc0_size) < sqrt(n)) {
 		if (id == 0)
 			printf("Too many processes\n");
 		MPI_Finalize();
@@ -54,10 +54,10 @@ int main(int argc, char *argv[])
 
 	for (uint64_t i = 0; i < size >> 1; i++)
 		marked[i] = 0;
-	uint64_t index = 0;
 
 
-	uint64_t prime = 2;
+	//First Prime starts at 3
+	uint64_t prime = 3;
 	uint64_t first;
 	while (prime * prime <= n) {
 		if (prime * prime > low_value)
@@ -67,12 +67,12 @@ int main(int argc, char *argv[])
 			else first = prime - (low_value % prime);
 		}
 		for (uint64_t i = first; i < size; i += prime)
-			marked[i >> 1] = 1;
+			if (i & 1)//only if i is odd
+				marked[i >> 1] = 1;
 		if (id == 0) {
-			while (marked[index >> 1]) {
-				index += 2;
+			while ((marked[(prime) >> 1]) && (prime < high_value)) {
+				prime += 2;
 			}
-			prime = index + 2;
 		}
 		MPI_Bcast(&prime, 1, MPI_UINT64_T, 0, MPI_COMM_WORLD);
 	}
