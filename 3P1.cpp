@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 		//1 is not prime
 		marked[0] = 1;
 	}
-	printf("%d Reach Checkpoint 1", id);
+	printf("%d Reach Checkpoint 1\n", id);
 	//First Prime starts at 3
 	uint64_t prime = 3;
 	uint64_t first;
@@ -72,18 +72,17 @@ int main(int argc, char *argv[])
 			else
 				first = prime - (low_value % prime);
 		}
-		for (uint64_t i = (first >> 1); i < (size >> 1); i += (prime >> 1))
+		for (uint64_t i = first; i < size; i +=prime)
 			if (i & 1)//only if i is odd
 				marked[i >> 1] = 1;
 		if (id == 0) {
 			uint64_t next_Unmark = prime >> 1;
 			while ((marked[next_Unmark]) && (next_Unmark < (high_value >> 1))) {
-				next_Unmark++;////////////////////////////
+				next_Unmark++;
 			}
 			//next prime
 			prime = (next_Unmark << 1) + 1; //*2+1, same speed if -O3.
 		}
-		prime = n;
 		MPI_Bcast(&prime, 1, MPI_UINT64_T, 0, MPI_COMM_WORLD);
 	}
 	printf("%d Reach Checkpoint 2", id);
