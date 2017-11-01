@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 		//1 is not prime
 		marked[0] = 1;
 	}
-
+	printf("%d Reach Checkpoint 1", id);
 	//First Prime starts at 3
 	uint64_t prime = 3;
 	uint64_t first;
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 		}
 		MPI_Bcast(&prime, 1, MPI_UINT64_T, 0, MPI_COMM_WORLD);
 	}
-
+	printf("%d Reach Checkpoint 2", id);
 
 	int count = 0;
 	for (uint64_t i = 0; i < (size >> 1); i++)
