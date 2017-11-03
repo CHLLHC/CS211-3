@@ -8,7 +8,7 @@ mpic++ -o run3 source3.cpp -std=c++11
 king="CHL"
 part="PART"
 dash="_"
-node="NODE(S)"		
+node="NODES"		
 jobfileext=".job"
 for nc in 1 2 4 8
 do
