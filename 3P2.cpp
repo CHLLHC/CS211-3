@@ -60,11 +60,11 @@ int main(int argc, char *argv[])
 		my_SP[i] = 0;
 
 
-	uint64_t maxN = sqrt(numOfSP);
-	for (uint64_t i = 3; i <= maxN; ++i) {
+	uint64_t maxN = sqrt(numOfSP * 2);
+	for (uint64_t i = 3; i <= maxN; i += 2) {
 		if (my_SP[i >> 1] == 0) {
 			uint64_t j = i + i + i;
-			while (j <= maxN) {
+			while (j <= numOfSP) {
 				my_SP[j >> 1] = 1;
 				j += i + i;
 			}
