@@ -71,8 +71,7 @@ int main(int argc, char *argv[])
 			first += prime;
 		}
 		for (uint64_t i = first; i < size; i += (prime + prime))
-			if (i & 1)//only if i is odd
-				marked[i >> 1] = 1;
+			marked[i >> 1] = 1;
 		if (id == 0) {
 			uint64_t next_Unmark = (prime >> 1) + 1;
 			while ((marked[next_Unmark]) && (next_Unmark < (high_value >> 1))) {
