@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 			else
 				first = prime - (low_value % prime);
 		}
-		if ((low_value + first) & 1 == 0) {
+		if (((low_value + first) & 1) == 0) {
 			first += prime;
 		}
 		for (uint64_t i = first; i < size; i += (prime + prime))
