@@ -45,15 +45,33 @@ int main(int argc, char *argv[])
 	}
 
 	uint8_t *marked = new uint8_t[size >> 1];
-	if (marked == NULL) {
+	uint64_t numOfSP = sqrt(n);
+	numOfSP = numOfSP / 2;
+	uint8_t *my_SP = new uint8_t[numOfSP];
+	if ((marked == NULL) || (my_SP == NULL)) {
 		printf("Cannot allocate enough memory\n");
 		MPI_Finalize();
 		return 1;
 	}
-
 	for (uint64_t i = 0; i < (size >> 1); i++)
 		marked[i] = 0;
 	//marked[0] was for 1, but since 1 is not prime but 2 is, so marked[0] is for 2 instead.
+	for (uint64_t i = 0; i < numOfSP; i++)
+		my_SP[i] = 0;
+
+
+	uint64_t maxN = sqrt(numOfSP);
+	for (uint64_t i = 3; i <= maxN; ++i) {
+		if (my_SP[i >> 1] == 0) {
+			uint64_t j = i + i + i;
+			while (j <= maxN) {
+				my_SP[j >> 1] = 1;
+				j += i + i;
+			}
+		}
+	}
+
+
 
 	//First Prime starts at 3
 	uint64_t prime = 3;
@@ -72,15 +90,17 @@ int main(int argc, char *argv[])
 		}
 		for (uint64_t i = first; i < size; i += (prime + prime))
 			marked[i >> 1] = 1;
-		if (id == 0) {
-			uint64_t next_Unmark = (prime >> 1) + 1;
-			while ((marked[next_Unmark]) && (next_Unmark < (high_value >> 1))) {
-				next_Unmark++;
-			}
-			//next prime
+		uint64_t next_Unmark = (prime >> 1) + 1;
+		while ((my_SP[next_Unmark]) && (next_Unmark < numOfSP)) {
+			next_Unmark++;
+		}
+		//next prime
+		if (next_Unmark == numOfSP) {
+			break;
+		}
+		else {
 			prime = (next_Unmark << 1) + 1; //*2+1, same speed if -O3.
 		}
-		MPI_Bcast(&prime, 1, MPI_UINT64_T, 0, MPI_COMM_WORLD);
 	}
 
 
