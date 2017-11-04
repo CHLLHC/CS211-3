@@ -29,6 +29,7 @@ do
 		matchpat=$(echo "$matchpat -e \"$handle\"")
 	done
 done
+cusr=$(whoami)
 echo "Jobs submitted, please come back later."
 {
 while [[ ! -z  $(qstat | grep $matchpat) ]]
