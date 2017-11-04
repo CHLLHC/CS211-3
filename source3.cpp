@@ -15,6 +15,9 @@
 #define BLOCK_OWNER(index,p,n) \
         ( ( ((p)*(index)+1)-1 ) / (n) )
 
+void myBitSet(uint64_t *a, uint64_t pos) {
+	a[pos >> 6] |= 1 << (pos & 0x3F);
+}
 
 int main(int argc, char *argv[])
 {

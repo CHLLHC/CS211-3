@@ -1,4 +1,5 @@
 #!/bin/bash
+rm CHL_P3*
 echo "Loading modules"
 module purge
 module load gcc-4.7.2
@@ -41,9 +42,19 @@ while [[ ! -z "$(qstat | grep "CHL_P3")" ]]
 do
 	sleep 5
 done
-
-
-
+outputext=".o*"
+{
+for pt in 1 2 3
+do
+	echo Part$pt:
+	for nc in 1 2 4 8
+	do
+		name=$king$dash$part$pt$dash$nc$node
+		cat $name$outputext
+		echo $nc
+	done
+done
+} > result
 printf "====>CHL<====\nhchen070's jobs have finished, please check.\n=============\n" | write $cusr
 echo "hchen070's jobs have finished, please check." | mail -s "hchen070's jobs Done." $cusr
 } &
