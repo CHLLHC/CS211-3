@@ -1,5 +1,5 @@
 #!/bin/bash
-rm CHL_P3*
+rm -f CHL_P3*
 echo "Loading modules"
 module purge
 module load gcc-4.7.2
