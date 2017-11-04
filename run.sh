@@ -31,11 +31,11 @@ do
 done
 echo "Jobs submitted, please come back later."
 {
-while [[!  -z  $(qstat | grep $matchpat) ]]
+while [[ ! -z  $(qstat | grep $matchpat) ]]
 do
 	sleep 5
 done
-echo "hchen070's jobs have finished, please check." | write $cusr
-echo "hchen070's jobs have finished, please check." | mail $cusr
+printf "====>CHL<====\nhchen070's jobs have finished, please check.\n=============\n" | write $cusr
+echo "hchen070's jobs have finished, please check." | mail -s "hchen070's jobs Done." $cusr
 } &
 
