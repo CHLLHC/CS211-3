@@ -15,7 +15,6 @@ part="P"
 dash="_"
 node="N"		
 jobfileext=".job"
-matchpat=""
 for nc in 1 2 4 8
 do
 	for pt in 1 2 3
@@ -31,7 +30,6 @@ do
 		echo "cd \$PBS_O_WORKDIR" >> $jobfile
 		echo "mpirun ./run$pt 10000000000" >> $jobfile
 		handle=$(qsub $jobfile)
-		matchpat=$(printf "%s -e \"$handle\"" "$matchpat")
 		printf "."
 	done
 done
@@ -39,8 +37,7 @@ printf "\n"
 cusr=$(whoami)
 echo "Jobs submitted, please come back later."
 {
-qstat > status
-while [[ ! -z "$(grep $matchpat status)" ]]
+while [[ ! -z "$(qstat | grep "CHL_P3")" ]]
 do
 	sleep 5
 done
