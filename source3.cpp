@@ -16,11 +16,11 @@
         ( ( ((p)*(index)+1)-1 ) / (n) )
 
 void myBitSet(uint64_t *a, uint64_t pos) {
-	a[pos >> 6] |= 1 << (pos & 0x3F);
+	a[pos >> 6] |= 1ULL << (pos & 0x3F);
 }
 
 bool myBitCheck(uint64_t *a, uint64_t pos) {
-	return a[pos >> 6] & (1 << (pos & 0x3F));
+	return a[pos >> 6] & (1ULL << (pos & 0x3F));
 }
 
 int main(int argc, char *argv[])
