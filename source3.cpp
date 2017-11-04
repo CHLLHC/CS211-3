@@ -15,12 +15,12 @@
 #define BLOCK_OWNER(index,p,n) \
         ( ( ((p)*(index)+1)-1 ) / (n) )
 
-void myBitSet(uint64_t *a, uint64_t pos) {
-	a[pos >> 6] |= 1ULL << (pos & 0x3F);
+void myBitSet(uint8_t *a, uint64_t pos) {
+	a[pos >> 3] |= 1 << (pos & 0x07);
 }
 
-bool myBitCheck(uint64_t *a, uint64_t pos) {
-	return a[pos >> 6] & (1ULL << (pos & 0x3F));
+bool myBitCheck(uint8_t *a, uint64_t pos) {
+	return a[pos >> 3] & (1 << (pos & 0x07));
 }
 
 int main(int argc, char *argv[])
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 	uint64_t *marked = new uint64_t[(size >> 1)];
 	uint64_t numOfSP = sqrt(n);
 	numOfSP = numOfSP >> 1;
-	uint64_t *my_SP = new uint64_t[(numOfSP >> 6) + 1];
+	uint8_t *my_SP = new uint8_t[(numOfSP >> 3) + 1];
 	if ((marked == NULL) || (my_SP == NULL)) {
 		printf("Cannot allocate enough memory\n");
 		MPI_Finalize();
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 	for (uint64_t i = 0; i < (size >> 1); i++)
 		marked[i] = 0;
 	//marked[0] was for 1, but since 1 is not prime but 2 is, so marked[0] is for 2 instead.
-	for (uint64_t i = 0; i < (numOfSP >> 6) + 1; i++)
+	for (uint64_t i = 0; i < (numOfSP >> 3) + 1; i++)
 		my_SP[i] = 0;
 
 
