@@ -5,11 +5,12 @@ module load mvapich2-1.9/gcc-4.7.2
 mpic++ -o run1 source1.cpp -std=c++11
 mpic++ -o run2 source2.cpp -std=c++11
 mpic++ -o run3 source3.cpp -std=c++11
-king="CHL"
-part="PART"
+king="CHL_P3"
+part="P"
 dash="_"
-node="NODES"		
+node="N"		
 jobfileext=".job"
+matchpat=""
 for nc in 1 2 4 8
 do
 	for pt in 1 2 3
@@ -24,8 +25,17 @@ do
 		echo "PBS_O_WORKDIR=$(pwd)" >> $jobfile
 		echo "cd \$PBS_O_WORKDIR" >> $jobfile
 		echo "mpirun ./run$pt 10000000000" >> $jobfile
-		qsub $jobfile
+		handle=$(qsub $jobfile)
+		matchpat=$(echo "$matchpat -e \"$handle\"")
 	done
 done
-
+echo "Jobs submitted, please come back later."
+{
+while [[!  -z  $(qstat | grep $matchpat) ]]
+do
+	sleep 5
+done
+echo "hchen070's jobs have finished, please check." | write $cusr
+echo "hchen070's jobs have finished, please check." | mail $cusr
+} &
 
