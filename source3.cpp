@@ -15,11 +15,11 @@
 #define BLOCK_OWNER(index,p,n) \
         ( ( ((p)*(index)+1)-1 ) / (n) )
 
-void myBitSet(uint8_t *a, uint64_t pos) {
+inline void myBitSet(uint8_t *a, uint64_t pos) {
 	a[pos >> 3] |= 1 << (pos & 0x07);
 }
 
-bool myBitCheck(uint8_t *a, uint64_t pos) {
+inline bool myBitCheck(uint8_t *a, uint64_t pos) {
 	return a[pos >> 3] & (1 << (pos & 0x07));
 }
 
