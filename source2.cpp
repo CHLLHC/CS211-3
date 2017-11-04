@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 
 
 	if (id == 0) {
-		printf("The total number of prime: %d, total time: %10.6f, total node ");
+		printf("The total number of prime: %d, total time: %10.6f, total node ", global_count, elapsed_time);
 		//printf("%d primes are less than or equal to %llu\n",
 		//	global_count, n);
 		//printf("Total elapsed time: %10.6f\n", elapsed_time);
