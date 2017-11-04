@@ -39,7 +39,7 @@ printf "\n"
 cusr=$(whoami)
 echo "Jobs submitted, please come back later."
 {
-while [[ ! -z  "$(qstat | grep $matchpat)" ]]
+while ! qstat | grep $matchpat
 do
 	sleep 5
 done
