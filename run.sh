@@ -41,6 +41,9 @@ while [[ ! -z "$(qstat | grep "CHL_P3")" ]]
 do
 	sleep 5
 done
+
+
+
 printf "====>CHL<====\nhchen070's jobs have finished, please check.\n=============\n" | write $cusr
 echo "hchen070's jobs have finished, please check." | mail -s "hchen070's jobs Done." $cusr
 } &
