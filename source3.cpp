@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
 			if (((blockLow + first) & 1) == 0) {
 				first += prime;
 			}
-			for (uint64_t i = first; i < size; i += (prime + prime))
+			for (uint64_t i = first; i < realBlockSize; i += (prime + prime))
 				myBitSet(marked, (i+p) >> 1);
 			uint64_t next_Unmark = (prime >> 1) + 1;
 			while (myBitCheck(my_SP, next_Unmark) && (next_Unmark < numOfSP)) {
