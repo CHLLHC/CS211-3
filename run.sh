@@ -1,10 +1,13 @@
 #!/bin/bash
+set -x
 module purge
 module load gcc-4.7.2
 module load mvapich2-1.9/gcc-4.7.2
 mpic++ -o run1 source1.cpp -std=c++11
 mpic++ -o run2 source2.cpp -std=c++11
 mpic++ -o run3 source3.cpp -std=c++11
+echo "Submitting Jobs, please wait"
+set +x
 king="CHL_P3"
 part="P"
 dash="_"
@@ -27,8 +30,10 @@ do
 		echo "mpirun ./run$pt 10000000000" >> $jobfile
 		handle=$(qsub $jobfile)
 		matchpat=$(echo "$matchpat -e \"$handle\"")
+		printf "."
 	done
 done
+printf "\n"
 cusr=$(whoami)
 echo "Jobs submitted, please come back later."
 {
