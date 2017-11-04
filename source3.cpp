@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 	//First Prime starts at 3
 	uint64_t prime = 3;
 	uint64_t first;
-	while (prime * prime <= n) {
+	while (prime * prime <= high_value) {
 		if (prime * prime > low_value)
 			first = prime * prime - low_value;
 		else {
