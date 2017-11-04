@@ -15,11 +15,11 @@
 #define BLOCK_OWNER(index,p,n) \
         ( ( ((p)*(index)+1)-1 ) / (n) )
 
-inline void myBitSet(uint8_t *a, uint64_t pos) {
+void myBitSet(uint8_t *a, uint64_t pos) {
 	a[pos >> 3] |= 1 << (pos & 0x07);
 }
 
-inline bool myBitCheck(uint8_t *a, uint64_t pos) {
+bool myBitCheck(uint8_t *a, uint64_t pos) {
 	return a[pos >> 3] & (1 << (pos & 0x07));
 }
 
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	uint64_t *marked = new uint64_t[(size >> 1)];
+	uint8_t *marked = new uint8_t[(size >> 4) + 1];
 	uint64_t numOfSP = sqrt(n);
 	numOfSP = numOfSP >> 1;
 	uint8_t *my_SP = new uint8_t[(numOfSP >> 3) + 1];
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 		MPI_Finalize();
 		return 1;
 	}
-	for (uint64_t i = 0; i < (size >> 1); i++)
+	for (uint64_t i = 0; i < (size >> 4) + 1; i++)
 		marked[i] = 0;
 	//marked[0] was for 1, but since 1 is not prime but 2 is, so marked[0] is for 2 instead.
 	for (uint64_t i = 0; i < (numOfSP >> 3) + 1; i++)
@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 			first += prime;
 		}
 		for (uint64_t i = first; i < size; i += (prime + prime))
-			marked[i >> 1] = 1;
+			myBitSet(marked, i >> 1);
 		uint64_t next_Unmark = (prime >> 1) + 1;
 		while (myBitCheck(my_SP, next_Unmark) && (next_Unmark < numOfSP)) {
 			next_Unmark++;
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
 
 	int count = 0;
 	for (uint64_t i = 0; i < (size >> 1); i++)
-		if (!marked[i])
+		if (!myBitCheck(marked,i))
 			count++;
 
 
