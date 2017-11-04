@@ -19,6 +19,10 @@ void myBitSet(uint64_t *a, uint64_t pos) {
 	a[pos >> 6] |= 1 << (pos & 0x3F);
 }
 
+bool myBitCheck(uint64_t *a, uint64_t pos) {
+	return a[pos >> 6] & (1 << (pos & 0x3F));
+}
+
 int main(int argc, char *argv[])
 {
 	int rc = MPI_Init(&argc, &argv);
@@ -47,10 +51,10 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	uint8_t *marked = new uint8_t[size >> 1];
+	uint64_t *marked = new uint64_t[(size >> 1)];
 	uint64_t numOfSP = sqrt(n);
-	numOfSP = numOfSP / 2;
-	uint8_t *my_SP = new uint8_t[numOfSP];
+	numOfSP = numOfSP >> 1;
+	uint64_t *my_SP = new uint64_t[(numOfSP >> 6) + 1];
 	if ((marked == NULL) || (my_SP == NULL)) {
 		printf("Cannot allocate enough memory\n");
 		MPI_Finalize();
@@ -59,16 +63,16 @@ int main(int argc, char *argv[])
 	for (uint64_t i = 0; i < (size >> 1); i++)
 		marked[i] = 0;
 	//marked[0] was for 1, but since 1 is not prime but 2 is, so marked[0] is for 2 instead.
-	for (uint64_t i = 0; i < numOfSP; i++)
+	for (uint64_t i = 0; i < (numOfSP >> 6) + 1; i++)
 		my_SP[i] = 0;
 
 
 	uint64_t maxN = sqrt(numOfSP * 2);
 	for (uint64_t i = 3; i <= maxN; i += 2) {
-		if (my_SP[i >> 1] == 0) {
+		if (myBitCheck(my_SP, i >> 1) == 0) {
 			uint64_t j = i + i + i;
 			while (j <= numOfSP) {
-				my_SP[j >> 1] = 1;
+				myBitSet(my_SP, j >> 1);
 				j += i + i;
 			}
 		}
@@ -94,7 +98,7 @@ int main(int argc, char *argv[])
 		for (uint64_t i = first; i < size; i += (prime + prime))
 			marked[i >> 1] = 1;
 		uint64_t next_Unmark = (prime >> 1) + 1;
-		while ((my_SP[next_Unmark]) && (next_Unmark < numOfSP)) {
+		while (myBitCheck(my_SP, next_Unmark) && (next_Unmark < numOfSP)) {
 			next_Unmark++;
 		}
 		//next prime
