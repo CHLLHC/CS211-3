@@ -81,32 +81,40 @@ int main(int argc, char *argv[])
 
 
 	//First Prime starts at 3
-	uint64_t prime = 3;
+	uint64_t prime;
 	uint64_t first;
-	while (prime * prime <= high_value) {
-		if (prime * prime > low_value)
-			first = prime * prime - low_value;
-		else {
-			if (low_value % prime == 0)
-				first = 0;
-			else
-				first = prime - (low_value % prime);
-		}
-		if (((low_value + first) & 1) == 0) {
-			first += prime;
-		}
-		for (uint64_t i = first; i < size; i += (prime + prime))
-			myBitSet(marked, i >> 1);
-		uint64_t next_Unmark = (prime >> 1) + 1;
-		while (myBitCheck(my_SP, next_Unmark) && (next_Unmark < numOfSP)) {
-			next_Unmark++;
-		}
-		//next prime
-		if (next_Unmark == numOfSP) {
-			break;
-		}
-		else {
-			prime = (next_Unmark << 1) + 1; //*2+1, same speed if -O3.
+	const uint64_t BlockSize = 1ULL << 20;
+
+	for (uint64_t p = 0; p < size; p += BlockSize) {
+		prime = 3;
+		uint64_t blockLow = low_value + p;
+		uint64_t blockHigh = MIN(blockLow + BlockSize, high_value);
+		uint64_t realBlockSize = blockHigh - blockLow + 1;
+		while (prime * prime <= blockHigh) {
+			if (prime * prime > blockLow)
+				first = prime * prime - blockLow;
+			else {
+				if (blockLow % prime == 0)
+					first = 0;
+				else
+					first = prime - (blockLow % prime);
+			}
+			if (((blockLow + first) & 1) == 0) {
+				first += prime;
+			}
+			for (uint64_t i = first; i < size; i += (prime + prime))
+				myBitSet(marked, (i+p) >> 1);
+			uint64_t next_Unmark = (prime >> 1) + 1;
+			while (myBitCheck(my_SP, next_Unmark) && (next_Unmark < numOfSP)) {
+				next_Unmark++;
+			}
+			//next prime
+			if (next_Unmark == numOfSP) {
+				break;
+			}
+			else {
+				prime = (next_Unmark << 1) + 1; //*2+1, same speed if -O3.
+			}
 		}
 	}
 
