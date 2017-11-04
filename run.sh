@@ -31,7 +31,7 @@ do
 		echo "cd \$PBS_O_WORKDIR" >> $jobfile
 		echo "mpirun ./run$pt 10000000000" >> $jobfile
 		handle=$(qsub $jobfile)
-		matchpat=$(echo "$matchpat -e \"$handle\"")
+		matchpat=$(printf "%s -e \"$handle\"" "$matchpat")
 		printf "."
 	done
 done
