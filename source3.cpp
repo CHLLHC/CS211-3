@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 	//First Prime starts at 3
 	uint64_t prime;
 	uint64_t first;
-	const uint64_t BlockSize = 1ULL << 20;
+	const uint64_t BlockSize = 1ULL << 21;
 
 	for (uint64_t p = 0; p < size; p += BlockSize) {
 		prime = 3;
