@@ -6,9 +6,9 @@ module load gcc-4.7.2
 module load mvapich2-1.9/gcc-4.7.2
 echo "Modules loaded, compiling."
 set -x
-mpic++ -o run1 source1.cpp -std=c++11
-mpic++ -o run2 source2.cpp -std=c++11
-mpic++ -o run3 source3.cpp -std=c++11
+mpic++ -o run1 source1.cpp -std=c++11 -Ofast -march=native
+mpic++ -o run2 source2.cpp -std=c++11 -Ofast -march=native
+mpic++ -o run3 source3.cpp -std=c++11 -Ofast -march=native
 set +x
 echo "Submitting Jobs, please wait"
 king="CHL_P3"
