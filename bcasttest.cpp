@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	}
 
 	uint64_t test = n;
-	for (uint64_t i = 0;i<proc0_size;++i){
+	for (uint64_t i = 0;i<9592;++i){
 		MPI_Bcast(&test, 1, MPI_UINT64_T, 0, MPI_COMM_WORLD);
 	}
 
